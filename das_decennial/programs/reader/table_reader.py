@@ -163,7 +163,7 @@ class TableVariable:
             Input:
                 var_type: supports "str" or "int"
         """
-        assert var_type in ["int", "str"]
+        assert var_type in ["int", "str", "NUMBER", "VARCHAR"]
         self.vtype = var_type
         self.sql_type = self.get_sql_type()  # Keeps types in sync.
 
@@ -171,8 +171,8 @@ class TableVariable:
         """
             This returns the SparkSQL type of a variable.
         """
-        return IntegerType() if self.vtype == "int" else\
-               StringType() if self.vtype == "str" else None
+        return IntegerType() if (self.vtype == "int" or self.vtype == "NUMBER") else \
+               StringType() if (self.vtype == "str" or self.vtype == "VARCHAR") else None
 
     def set_legal_values(self, legal_string):
         """
@@ -192,6 +192,25 @@ class TableVariable:
             endpoints = split_string.strip().split("-")
             left = endpoints[0].strip()
             right = endpoints[-1].strip()
+            if self.sql_type == IntegerType():
+                legal.append(Interval.NewRange(int(left), int(right)))
+            else:
+                legal.append(Interval.NewRange(left, right))
+        self.legal_values = LegalList(legal)
+
+    def set_legal_values_from_ranges(self, legal_ranges):
+        """
+            This sets the "legal values."
+
+            Input:
+                legal_string: a string of one of the following forms:
+                '[{"a": "21", "b": "25"}, {"a": "47", "b": "47"}, {"a": "61", "b": "61"}]'
+        """
+        legal = []
+
+        for value_tuple in legal_ranges:
+            left = value_tuple['a'].strip()
+            right = value_tuple['b'].strip()
             if self.sql_type == IntegerType():
                 legal.append(Interval.NewRange(int(left), int(right)))
             else:
@@ -223,7 +242,7 @@ class AbstractTable(AbstractDASModule):
 
         self.location = [os.path.expandvars(x) for x in re.split(C.REGEX_CONFIG_DELIM, self.getconfigwsec(C.PATH))]
 
-        self.variables = [TableVariable(var_name).make_from_config(self.config) for var_name in self.gettuplewsec(C.VARS)]
+        self.variables = self.make_variables()
 
         self.recode_variables = [TableVariable(var_name).make_from_config(self.config) for var_name in self.gettuplewsec(C.RECODE_VARS, default=())]
         
@@ -254,6 +273,8 @@ class AbstractTable(AbstractDASModule):
             except TypeError as err:
                 raise TypeError(f"Table {self.name} failed to create recoder, arguments: {args}, Error: {err.args}")
 
+    def make_variables(self):
+        return [TableVariable(var_name).make_from_config(self.config) for var_name in self.gettuplewsec(C.VARS)]
 
     def getconfigwsec(self, key):
         """
