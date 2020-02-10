@@ -15,11 +15,18 @@ from programs.schema.attributes.hhrace import HHRaceAttr
 from programs.schema.attributes.hhsex import HHSexAttr
 from programs.schema.attributes.hhsize import HHSizeAttr
 from programs.schema.attributes.hhtype import HHTypeAttr
+from programs.schema.attributes.hhgq1940 import HHGQ1940Attr as HHGQ_1940
+from programs.schema.attributes.age1940 import Age1940Attr as AGE_1940
+from programs.schema.attributes.sex1940 import Sex1940Attr as SEX_1940
+from programs.schema.attributes.hisp1940 import Hispanic1940Attr as HISPANIC_1940
+from programs.schema.attributes.citizen1940 import Citizen1940Attr as CITIZEN_1940
+from programs.schema.attributes.race1940 import Race1940Attr as RACE_1940
 
 _schema_dict = {
     CC.SCHEMA_REDUCED_DHCP_HHGQ: [HHGQAttr, SexAttr, AgeAttr, HispAttr, CenraceAttr, CitizenAttr],
     CC.SCHEMA_SF1: [RelAttr, SexAttr, AgeAttr, HispAttr, CenraceAttr],
-    CC.SCHEMA_HOUSEHOLD2010: [HHSexAttr, HHAgeAttr, HHHispAttr, HHRaceAttr, HHSizeAttr, HHTypeAttr, HHElderlyAttr, HHMultiAttr]
+    CC.SCHEMA_HOUSEHOLD2010: [HHSexAttr, HHAgeAttr, HHHispAttr, HHRaceAttr, HHSizeAttr, HHTypeAttr, HHElderlyAttr, HHMultiAttr],
+    CC.DAS_1940: [HHGQ_1940, SEX_1940, AGE_1940, HISPANIC_1940, RACE_1940, CITIZEN_1940]
 }
 
 def buildSchema(path=None, name=CC.SCHEMA_REDUCED_DHCP_HHGQ):

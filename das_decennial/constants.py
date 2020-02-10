@@ -140,6 +140,20 @@ class _DAS_CONSTANTS:
     ATTR_HHELDERLY = "elderly"
     ATTR_HHMULTI = "multi"
 
+    ATTR_HHGQ_1940 = "hhgq1940"
+    HHGQ_1940_HOUSEHOLD_TOTAL = "household"
+    HHGQ_1940_GQLEVELS = "gqlevels"
+    HHGQ_1940_INSTLEVELS = "instlevels"
+    HHGQ_1940_MENTAL_TOTAL = "gqMentalTotal"
+    HHGQ_1940_ELDERLY_TOTAL = "gqElderlyTotal"
+    HHGQ_1940_ROOMING_TOTAL = "gqRoomingTotal"
+
+    ATTR_CITIZEN_1940 = "citizen1940"
+    ATTR_RACE_1940 = "cenrace1940"
+    ATTR_AGE_1940 = "age1940"
+    ATTR_SEX_1940 = "sex1940"
+    ATTR_HISPANIC_1940 = "hispanic1940"
+
     ####################################
     # Recode Names for SchemaMaker     #
     ####################################
@@ -194,6 +208,7 @@ class _DAS_CONSTANTS:
     AGE_LT16GT65_TOTAL = "age_lt16gt65"
     AGE_PC03_LEVELS = "agecatPCO3"
     AGE_PC04_LEVELS = "agecatPCO4"
+    DAS_1940 = "1940"
 
 
     #DHCH

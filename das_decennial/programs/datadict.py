@@ -18,7 +18,6 @@ import programs.schema.table_building.building_DHCP_HHGQ_tables as Table_DHCP_HH
 import programs.schema.schemas.Schema_PL94 as Schema_PL94
 import programs.schema.schemas.Schema_PL94_CVAP as Schema_PL94_CVAP
 import programs.schema.schemas.Schema_PL94_P12 as Schema_PL94_P12
-import programs.schema.schemas.Schema_1940 as Schema_1940
 import programs.schema.schemas.Schema_SF1 as Schema_SF1
 import programs.schema.schemas.Schema_DHCP_HHGQ as Schema_DHCP_HHGQ
 import programs.schema.schemas.Schema_Household2010 as Schema_Household2010
@@ -90,7 +89,7 @@ def getSchema(schema_name: str) -> programs.schema.schema:
         con.DAS_PL94: Schema_PL94,
         con.DAS_PL94_CVAP: Schema_PL94_CVAP,
         con.DAS_PL94_P12: Schema_PL94_P12,
-        con.DAS_1940: Schema_1940,
+        con.DAS_1940: schemamaker,
         con.DAS_SF1: Schema_SF1,
         con.DAS_DHCP_HHGQ: Schema_DHCP_HHGQ,
         con.DAS_Household2010: Schema_Household2010,
@@ -98,7 +97,12 @@ def getSchema(schema_name: str) -> programs.schema.schema:
         con.CC.SCHEMA_REDUCED_DHCP_HHGQ: schemamaker,
     }
     assert schema_name in schema_modules, f"The '{schema_name}' schema module can't be found."
-    schema = schema_modules[schema_name].buildSchema()
+    schema_module = schema_modules[schema_name]
+    # Newer dynamic schemamaker requires the name of the schema to be passed in
+    if schema_module is schemamaker:
+        schema = schemamaker.buildSchema(name=schema_name)
+    else:
+        schema = schema_modules[schema_name].buildSchema()
     return schema
 
 

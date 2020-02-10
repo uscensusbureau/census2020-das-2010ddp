@@ -10,7 +10,6 @@ class InvariantsCreator(querybase_invariants.AbstractInvariantsCreator):
 
         self.invariant_funcs_dict = {
             "tot"                       : self.tot,
-            "va"                        : self.va,
             "gqhh_vect"                 : self.gqhh_vect,
             "gqhh_tot"                  : self.gqhh_tot,
             "gq_vect"                   : self.gq_vect
@@ -18,11 +17,7 @@ class InvariantsCreator(querybase_invariants.AbstractInvariantsCreator):
 
     def tot(self):
         """ Summing over all axes """
-        self.addToInvariantsDict(self.raw, (0, 1, 2, 3, 4), "tot", groupings=None)
-
-    def va(self):
-        """ Summing over all axes except 'voting' (1) and subsetting axis 1 to value 1 (voting age)"""
-        self.addToInvariantsDict(self.raw, (0, 2, 3, 4), "va", groupings={1: [[1]]})
+        self.addToInvariantsDict(self.raw, (0, 1, 2, 3, 4, 5), "tot", groupings=None)
 
     def gqhh_vect(self):
         """ These are all units, no summing, no subsetting/groupings"""
