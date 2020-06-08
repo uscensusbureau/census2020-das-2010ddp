@@ -57,10 +57,33 @@ def get_url_json(url, **kwargs):
     return json.loads(get_url(url, **kwargs))
 
 def user_data():
-    return get_url_json("http://169.254.169.254/2016-09-02/user-data/")
+    try:
+        return get_url_json("http://169.254.169.254/2016-09-02/user-data/")
+    except (TimeoutError,urllib.error.URLError) as e:
+        return {}
 
 def instance_identity():
-    return get_url_json('http://169.254.169.254/latest/dynamic/instance-identity/document')
+    try:
+        return get_url_json('http://169.254.169.254/latest/dynamic/instance-identity/document')
+    except (TimeoutError,urllib.error.URLError) as e:
+        # Not running on Amazon; return bogus info
+        null = None
+        return {  "accountId" : "999999999999",
+                  "architecture" : "x86_64",
+                  "availabilityZone" : "xx-xxxx-0x",
+                  "billingProducts" : null,
+                  "devpayProductCodes" : null,
+                  "marketplaceProductCodes" : null,
+                  "imageId" : "ami-00000000000000000",
+                  "instanceId" : "i-00000000000000000",
+                  "instanceType" : "z9.unknown",
+                  "kernelId" : null,
+                  "pendingTime" : "1980-01-01T00:00:00Z",
+                  "privateIp" : "127.0.0.1",
+                  "ramdiskId" : null,
+                  "region" : "xx-xxxx-0",
+                  "version" : "2017-09-30" }
+
 
 def ami_id():
     return get_url('http://169.254.169.254/latest/meta-data/ami-id')
@@ -72,7 +95,10 @@ def show_credentials():
     subprocess.call(['aws','configure','list'])
 
 def get_ipaddr():
-    return get_url("http://169.254.169.254/latest/meta-data/local-ipv4")
+    try:
+        return get_url("http://169.254.169.254/latest/meta-data/local-ipv4")
+    except (TimeoutError,urllib.error.URLError) as e:
+        socket.gethostbyname( socket.gethostname() )
 
 def instanceId():
     return instance_identity()['instanceId']

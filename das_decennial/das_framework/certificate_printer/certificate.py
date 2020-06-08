@@ -40,6 +40,8 @@ def system_module(mod):
         return "lib/python" in mod.__file__
     except AttributeError:
         return True
+    except TypeError:
+        return False
 
 
 def file_stats(path):
@@ -80,7 +82,7 @@ def get_bom(content=False):
                 ver = None
             try:
                 fname = mod.__file__
-            except AttributeError:
+            except (AttributeError,TypeError):
                 fname = None
             if type(name) != str:
                 name = ""
